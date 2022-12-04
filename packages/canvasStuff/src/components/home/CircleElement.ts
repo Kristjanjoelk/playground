@@ -1,6 +1,17 @@
+import { colors } from './contants'
 import { LineElement } from './LineElement'
 import type { Position } from './types'
 import { calculateEndPosition } from './utils'
+
+export interface CircleElementOptions {
+  pos: Position
+  startAngle: number
+  endAngle: number
+  size: number
+  lineAngle: number
+  rotationSpeed: number
+  clockWise: boolean | undefined
+}
 
 export class CircleElement {
   pos: Position
@@ -13,21 +24,21 @@ export class CircleElement {
   endPosition: Position
   lineElement: LineElement
 
-  constructor(pos: Position, size: number, startAngle: number, endAngle: number, lineAngle: number, rotationSpeed: number | null
-    , clockWise?: boolean) {
-    this.pos = pos
-    this.startAngle = startAngle
-    this.endAngle = endAngle
-    this.size = size
-    this.lineAngle = lineAngle
-    this.clockWise = clockWise
-    this.rotationSpeed = rotationSpeed !== null ? rotationSpeed : 0
+  constructor(options: CircleElementOptions) {
+    this.pos = options.pos
+    this.startAngle = options.startAngle
+    this.endAngle = options.endAngle
+    this.size = options.size
+    this.lineAngle = options.lineAngle
+    this.clockWise = options.clockWise
+    this.rotationSpeed = options.rotationSpeed !== null ? options.rotationSpeed : 0
     this.endPosition = calculateEndPosition(this.size, this.lineAngle, this.pos)
     this.lineElement = new LineElement(this.pos, this.endPosition)
   }
 
   draw = (context: CanvasRenderingContext2D) => {
     context.beginPath()
+    context.strokeStyle = colors.rgba(0.1).orange
     context.lineWidth = 2
     context.arc(this.pos.x, this.pos.y, this.size, this.startAngle, this.endAngle)
     context.stroke()

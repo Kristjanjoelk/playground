@@ -1,5 +1,5 @@
 import type { Ref } from 'vue'
-import { CircleElement } from './CircleElement'
+import type { CircleElement } from './CircleElement'
 import { colors } from './contants'
 import type { Position } from './types'
 
@@ -13,11 +13,15 @@ export interface CanvasContext {
 export interface CustomCanvasOptions {
   width: number
   height: number
+  stop: boolean
+  circles: CircleElement[]
 }
 
 export const defaultOptions: CustomCanvasOptions = {
   width: 1000,
   height: 1000,
+  stop: false,
+  circles: [],
 }
 
 export class CanvasClass {
@@ -42,20 +46,16 @@ export class CanvasClass {
     this.options = options ?? defaultOptions
     this.radian = 1
     this.then = Date.now()
-    this.circles = []
+    this.circles = options.circles
     this.traces = []
-    this.populateCircles()
+    // this.populateCircles()
     // this.draw()
     this.draw()
   }
 
-  populateCircles = () => {
-    const initial = new CircleElement({ x: this.options.width / 2, y: this.options.height / 2 }, 150, 0, 2 * Math.PI, 2 * Math.PI, 0.003, true)
-    const newCircle = new CircleElement({ x: 50, y: 100 }, 50, 0, 2 * Math.PI, 1, 0.05, false)
-
-    const seconNewCircle = new CircleElement({ x: 50, y: 100 }, 20, 0, 2 * Math.PI, 1, null)
-    this.circles.push(initial, newCircle, seconNewCircle)
-  }
+  // populateCircles = () => {
+  //   this.circles.push(initial, newCircle, seconNewCircle, thirdCircle, fourthCircle)
+  // }
 
   drawBorders = () => {
     if (this.context) {
@@ -86,7 +86,7 @@ export class CanvasClass {
 
   drawFromLastPoint = () => {
     const lastCircle = this.circles[this.circles.length - 1]
-    this.traces.push(lastCircle.pos)
+    this.traces.push(lastCircle.endPosition)
     const i = this.traces.length - 1
     if (i) {
       this.offCanvasContext.beginPath()
@@ -101,6 +101,8 @@ export class CanvasClass {
     window.requestAnimationFrame(this.draw)
     const now = Date.now()
     const elapsed = now - this.then
+    if (this.options.stop)
+      return
 
     // if enough time has elapsed, draw the next frame
 
@@ -121,7 +123,9 @@ export class CanvasClass {
   }
 
   updateOptions = async (options: CustomCanvasOptions) => {
-    await this.clear()
+    if (!options.stop)
+      await this.clear()
+
     this.options = options
     this.draw()
   }
