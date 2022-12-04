@@ -12,6 +12,7 @@ const size = reactive({
 })
 
 const homeCanvas = ref<HTMLCanvasElement>()
+const offCanvas = ref<HTMLCanvasElement>()
 
 const { canvas, options } = inject<CanvasContext>(CanvasContextSymbol) as CanvasContext
 
@@ -20,7 +21,7 @@ const { width, height } = toRefs(options)
 watch(homeCanvas, (value: HTMLCanvasElement | undefined) => {
   if (value) {
     try {
-      canvas.value = new CanvasClass(homeCanvas.value, options)
+      canvas.value = new CanvasClass(homeCanvas.value, offCanvas.value, options)
     }
     catch (e) {
       console.error('error', e)
@@ -31,9 +32,13 @@ watch(homeCanvas, (value: HTMLCanvasElement | undefined) => {
 
 <template>
   <canvas id="canvas" ref="homeCanvas" :width="width" :height="height" />
+  <canvas id="off-canvas" ref="offCanvas" :width="width" :height="height" class="hidden" />
   <br>
   <CanvasOptions />
 </template>
 
 <style scoped>
+.hidden {
+  display: none;
+}
 </style>
