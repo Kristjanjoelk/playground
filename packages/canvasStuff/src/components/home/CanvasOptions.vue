@@ -2,7 +2,7 @@
 import { inject, toRefs } from 'vue'
 import type { CanvasContext } from './CanvasClass'
 import { CanvasContextSymbol } from './CanvasClass'
-const { options } = inject<CanvasContext>(CanvasContextSymbol) as CanvasContext
+const { options, canvas } = inject<CanvasContext>(CanvasContextSymbol) as CanvasContext
 
 const { width, height, stop } = toRefs(options)
 </script>
@@ -11,6 +11,10 @@ const { width, height, stop } = toRefs(options)
   <label for="stop">
     stop
     <button id="stop" @click="(stop = !stop)" />
+  </label>
+  <label for="clear">
+    clear
+    <button id="clear" @click="canvas.clear(true)" />
   </label>
   <label for="width">
     width: {{ width }} s

@@ -3,7 +3,7 @@ import { computed, inject, onMounted, reactive, ref, toRefs, watch } from 'vue'
 
 import type { CanvasContext } from './CanvasClass'
 import CanvasOptions from './CanvasOptions.vue'
-import CanvasCircleAdder from './CanvasCircleAdder.vue'
+import CanvasCircleOptions from './CanvasCircleOptions.vue'
 import { CanvasClass, CanvasContextSymbol } from './CanvasClass'
 import { colors } from './contants'
 
@@ -32,11 +32,11 @@ watch(homeCanvas, (value: HTMLCanvasElement | undefined) => {
 </script>
 
 <template>
+  <CanvasCircleOptions />
   <canvas id="canvas" ref="homeCanvas" :width="width" :height="height" />
   <canvas id="off-canvas" ref="offCanvas" :width="width" :height="height" class="hidden" />
   <br>
   <CanvasOptions />
-  <CanvasCircleAdder />
 </template>
 
 <style scoped>

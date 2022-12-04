@@ -115,9 +115,13 @@ export class CanvasClass {
     }
   }
 
-  clear = async () => {
+  clear = async (all?: boolean) => {
     if (this.context)
+
       this.context.clearRect(0, 0, this.options.width, this.options.height)
+
+    if (all)
+      this.offCanvasContext.clearRect(0, 0, this.options.width, this.options.height)
 
     return true
   }
